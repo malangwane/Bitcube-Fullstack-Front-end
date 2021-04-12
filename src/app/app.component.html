@@ -1,0 +1,50 @@
+﻿<!-- main menu -->
+<nav class="navbar navbar-expand navbar-dark" style="background-color: #272783;">
+    <div class="navbar-nav">
+        <a class="nav-item nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+    </div>
+
+    <div class="navbar-nav" *ngIf="!user">
+        <a class="nav-item nav-link" routerLink="/for-sale" routerLinkActive="active">Buy</a>
+        <a class="nav-item nav-link" routerLink="/account/login">Sell</a>       
+    </div>
+
+    <div class="navbar-nav ml-auto" *ngIf="user">
+        <a class="nav-item nav-link" (click)="logout()">Logout</a>
+    </div>
+    <div class="navbar-nav ml-auto" *ngIf="!user">
+        <a class="nav-item nav-link" routerLink="/account/register" routerLinkActive="active">Register</a>
+        <a class="nav-item nav-link" routerLink="/account/login" routerLinkActive="active">Login</a>
+    </div>
+</nav>
+<!--authenticated user menu-->
+<nav class="navbar navbar-expand navbar-dark" style="background-color: #1e1c81;" *ngIf="user">
+    <div class="navbar-nav">
+        <a class="nav-item nav-link" routerLink="/user-account/my-adverts" routerLinkActive="active">My adverts</a>
+        <a class="nav-item nav-link" routerLink="/user-account/manage" routerLinkActive="active">My account</a>
+        <a class="nav-item nav-link" routerLink="user-account/seller-profile" routerLinkActive="active">My profile</a>
+        <a class="nav-item nav-link" routerLink="/user-account/favourites" routerLinkActive="active">My favourites</a>
+        <a class="nav-item nav-link" routerLink="/for-sale" routerLinkActive="active">Buy</a>
+        <a class="nav-item nav-link" routerLink="/user-account/my-adverts/add" routerLinkActive="active">Sell</a>
+    </div>
+    <div class="navbar-nav ml-auto">
+        <a class="nav-item nav-link">Welcome {{user.firstName}}!</a>
+
+    </div>
+</nav>
+<!--admin user menu-->
+<nav class="navbar navbar-expand navbar-dark" style="background-color: #8b8a8a;" *ngIf="user && user.adminRole">
+    <div class="navbar-nav">
+        <a class="nav-item nav-link" routerLink="/admin/user-management" routerLinkActive="active">User managment</a>
+    </div>
+</nav>
+
+<!-- main app container -->
+<div class="app-container" [ngClass]="{ 'bg-light': user }">
+    <router-outlet></router-outlet>
+</div>
+
+<!--footer-->
+<footer class="footer" style="background-color: #272783;">
+    <p>Created by : Wiseman Malangwane &copy;2021</p>
+</footer>
