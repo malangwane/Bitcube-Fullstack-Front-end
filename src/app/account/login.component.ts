@@ -58,14 +58,15 @@ export class LoginComponent implements OnInit {
                             Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,100}$/), Validators.maxLength(this.maxChars)]]
         });
 
+       
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
 
     ngAfterViewInit(): void {
-    
+        
         const controlBlurs: Observable<any>[] = this.formInputElements
             .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
-       
+        
         merge(this.form.valueChanges, ...controlBlurs)
             .pipe(debounceTime(800))
                 .subscribe(() => {
@@ -73,7 +74,7 @@ export class LoginComponent implements OnInit {
                 });
     }
 
-
+   
     showPassword(): void {
         if (this.passwordInputType === 'text') {
             this.passwordInputType = 'password';
@@ -85,9 +86,9 @@ export class LoginComponent implements OnInit {
     }
     
     onSubmit(): void {
-    
+        
+        this.alertService.clear();
 
-        // stop here if form is invalid
         if (this.form.invalid) {
             return;
         }

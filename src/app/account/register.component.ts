@@ -21,15 +21,14 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     loading: boolean = false;
     passwordToggleMessage: string = 'show passwords';
     passwordInputType = 'password';
-   
 
-   
+  
     maxChars: number = 100;
     firstNameMinChar: number = 1;
     lastNameMinChar: number = 3;
     emailMinChar: number = 6;
 
-   
+
     displayMessage: { [key: string]: string } = {};
     validationMessages: { [key: string]: { [key: string]: string } } = {
         firstName: {
@@ -49,7 +48,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
             email: 'Please enter a valid email address.'
         },
         passwordGroup: {
-            match: ' Make sure the confirmation matches your password.',
+            match: 'Please make sure the confirmation matches your password.',
         },
         password: {
             required: 'Please enter your chosen password.',
@@ -90,16 +89,15 @@ export class RegisterComponent implements OnInit, AfterViewInit {
             })
         });
 
-       
         const passwordFormGroup = this.form.get('passwordGroup');
         passwordFormGroup.setValidators(MatchValidator.match(passwordFormGroup.get('password'), passwordFormGroup.get('passwordConfirm')));
     }
 
     ngAfterViewInit(): void {
-        
+    
         const controlBlurs: Observable<any>[] = this.formInputElements
             .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
-        
+    
         merge(this.form.valueChanges, ...controlBlurs)
             .pipe(debounceTime(800))
             .subscribe(() => {
@@ -118,7 +116,9 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     }
 
     onSubmit(): void {
-        
+     
+        this.alertService.clear();
+
 
         if (this.form.invalid) {
             return;
