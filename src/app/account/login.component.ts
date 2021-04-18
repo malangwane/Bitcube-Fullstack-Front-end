@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, first } from 'rxjs/operators';
 
-import { AccountService } from '@app/_services';
+import { AccountService, AlertService } from '@app/_services';
 import { WhitespaceValidator } from '@app/_validators';
 import { MessageProcessor } from '@app/_helpers';
 import { fromEvent, merge, Observable } from 'rxjs';
@@ -19,7 +19,6 @@ export class LoginComponent implements OnInit {
     returnUrl: string;
     passwordToggleMessage: string = 'show password';
     passwordInputType = 'password';
-    message : any;
 
   
     maxChars: number = 100;
@@ -45,7 +44,8 @@ export class LoginComponent implements OnInit {
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private alertService: AlertService
     ) {
         this.msgProcessor = new MessageProcessor(this.validationMessages);
     }
@@ -97,7 +97,7 @@ export class LoginComponent implements OnInit {
             .pipe(first())
             .subscribe(
                 user => {
-                    this.message.success("Login successfull", { autoClose: true, keepAfterRouteChange: true });
+                    this.alertService.success("Login successfull", { autoClose: true, keepAfterRouteChange: true });
                     if (user.adminRole) {
                         this.router.navigate(['/admin/user-management']);
                     } else {
@@ -105,7 +105,7 @@ export class LoginComponent implements OnInit {
                     }
                 },
                 error => {
-                    this.message.error(error);
+                    this.alertService.error(error);
                     this.loading = false;
                 });
     }

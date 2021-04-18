@@ -4,7 +4,7 @@ import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/fo
 import { fromEvent, merge, Observable } from 'rxjs';
 import { debounceTime, first } from 'rxjs/operators';
 
-import { AccountService } from '@app/_services';
+import { AccountService, AlertService } from '@app/_services';
 import { MessageProcessor } from '@app/_helpers';
 import { WhitespaceValidator, MatchValidator } from '@app/_validators';
 import { User } from '@app/_models';
@@ -21,7 +21,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     loading: boolean = false;
     passwordToggleMessage: string = 'show passwords';
     passwordInputType = 'password';
-    message: any;
+   
 
    
     maxChars: number = 100;
@@ -67,7 +67,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private alertService: AlertService
     ) {
         this.msgProcessor = new MessageProcessor(this.validationMessages);
     }
@@ -128,12 +129,12 @@ export class RegisterComponent implements OnInit, AfterViewInit {
             .pipe(first())
             .subscribe(
                 user => {
-                    this.message.success(`${user.firstName} ${user.lastName} registered successfully`, { keepAfterRouteChange: true });
+                    this.alertService.success(`${user.firstName} ${user.lastName} registered successfully`, { keepAfterRouteChange: true });
                     this.form.reset();
                     this.router.navigate(['../login'], { relativeTo: this.route });
                 },
                 error => {
-                    this.message.error(error);
+                    this.alertService.error(error);
                     this.loading = false;
                 });
     }
